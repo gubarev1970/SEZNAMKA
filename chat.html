@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <style>
+        /* Stylování stránky */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        header {
+            background: #35424a;
+            color: #ffffff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .chat-container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        .message-window {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        .input-container {
+            display: flex;
+        }
+        .input-container input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .input-container button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .input-container button:hover {
+            background-color: #45a049;
+        }
+        .emoji-picker {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .emoji {
+            font-size: 20px;
+            cursor: pointer;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2>Chat</h2>
+    <div id="coinDisplay">Mince: 0</div>
+</header>
+
+<div class="chat-container">
+    <div class="message-window" id="messageWindow"></div>
+
+    <div class="input-container">
+        <input type="text" id="messageInput" placeholder="Napište zprávu..." />
+        <button id="sendButton">Odeslat</button>
+    </div>
+
+    <div class="emoji-picker">
+        <span class="emoji" onclick="addEmoji('😊')">😊</span>
+        <span class="emoji" onclick="addEmoji('😢')">😢</span>
+        <span class="emoji" onclick="addEmoji('😂')">😂</span>
+        <span class="emoji" onclick="addEmoji('😍')">😍</span>
+        <span class="emoji" onclick="addEmoji('😎')">😎</span>
+        <span class="emoji" onclick="addEmoji('😡')">😡</span>
+        <span class="emoji" onclick="addEmoji('😱')">😱</span>
+        <span class="emoji" onclick="addEmoji('👍')">👍</span>
+        <span class="emoji" onclick="addEmoji('👋')">👋</span>
+        <span class="emoji" onclick="addEmoji('💔')">💔</span>
+        <span class="emoji" onclick="addEmoji('🎉')">🎉</span>
+        <span class="emoji" onclick="addEmoji('🌟')">🌟</span>
+    </div>
+</div>
+
+<script>
+let userCoins = 0;
+
+// Načtení mincí při načtení stránky chatu
+async function loadCoins() {
+    try {
+        const response = await fetch('db_url/user-coins', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            userCoins = data.coins || 0;
+            updateCoinDisplay();
+
+            // Kontrola a upozornění, pokud je počet mincí nula
+            if (userCoins === 0) {
+                alert("Nemáte mince. Pro další zprávy si musíte koupit další mince.");
+            }
+        } else {
+            console.error("Nepodařilo se načíst počet mincí z API.");
+            alert("Nepodařilo se načíst počet mincí.");
+        }
+    } catch (error) {
+        console.error("Chyba při načítání mincí:", error);
+        alert("Došlo k chybě při načítání mincí.");
+    }
+}
+
+// Aktualizace zobrazení mincí
+function updateCoinDisplay() {
+    const coinDisplay = document.getElementById('coinDisplay');
+    if (coinDisplay) {
+        coinDisplay.textContent = `Mince: ${userCoins}`;
+    }
+}
+
+// Zavolat funkci pro načtení mincí při načtení stránky
+loadCoins();
+
+function addEmoji(emoji) {
+    const input = document.getElementById('messageInput');
+    if (input) {
+        input.value += emoji;  // Přidá smajlík do vstupního pole
+        input.focus();  // Nastaví kurzor zpět do vstupního pole
+    } else {
+        console.error("Chyba: Pole pro zadání zprávy nebylo nalezeno.");
+    }
+}
+
+// Odeslání zprávy
+document.getElementById('sendButton').addEventListener('click', function() {
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value;
+
+    // Zkontrolujte, zda je uživatel dostatečně mincí
+    if (userCoins > 0 && message.trim() !== "") {
+        // Odeslat zprávu a snížit počet mincí
+        userCoins -= 1; // Cena zprávy je 1 mince
+        updateCoinDisplay();
+        
+        // Přidat zprávu do okna zpráv
+        const messageWindow = document.getElementById('messageWindow');
+        const messageElement = document.createElement('div');
+        messageElement.textContent = message;
+        messageWindow.appendChild(messageElement);
+        messageInput.value = ''; // Vymazat vstupní pole
+    } else {
+        alert("Nemáte dostatek mincí k odeslání zprávy.");
+    }
+});
+</script>
+<script src="app.js"></script>
+</body>
+</html>
+

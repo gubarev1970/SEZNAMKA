@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrace</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="password"],
+        input[type="date"],
+        input[type="number"],
+        input[type="email"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Registrace</h1>
+
+<form id="registrationForm">
+    <label for="email">E-mail</label>
+    <input type="email" id="email" required>
+
+    <label for="username">Uživatelské jméno</label>
+    <input type="text" id="username" required>
+
+    <label for="password">Heslo</label>
+    <input type="password" id="password" required>
+
+    <label for="birthdate">Datum narození</label>
+    <input type="date" id="birthdate" required>
+
+    <label for="height">Výška (cm)</label>
+    <input type="number" id="height" required>
+
+    <label for="weight">Váha (kg)</label>
+    <input type="number" id="weight" required>
+
+    <label for="eyes">Barva očí</label>
+    <input type="text" id="eyes" required>
+
+    <label for="hair">Barva vlasů</label>
+    <input type="text" id="hair" required>
+
+    <label for="children">Počet dětí</label>
+    <input type="number" id="children" required>
+
+    <label for="job">Zaměstnání</label>
+    <input type="text" id="job" required>
+
+    <label for="hobbies">Koníčky</label>
+    <input type="text" id="hobbies" required>
+
+    <label for="orientation">Sexuální orientace</label>
+    <input type="text" id="orientation" required>
+
+    <label for="search">Koho hledám</label>
+    <input type="text" id="search" required>
+
+    <button type="submit" id="registerButton">Registrovat</button>
+</form>
+
+<script>
+    document.getElementById('registrationForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const birthdate = document.getElementById('birthdate').value;
+        const height = document.getElementById('height').value;
+        const weight = document.getElementById('weight').value;
+        const eyes = document.getElementById('eyes').value;
+        const hair = document.getElementById('hair').value;
+        const children = document.getElementById('children').value;
+        const job = document.getElementById('job').value;
+        const hobbies = document.getElementById('hobbies').value;
+        const orientation = document.getElementById('orientation').value;
+        const search = document.getElementById('search').value;
+
+        // Vytvoření objektu s daty uživatele
+        const userData = {
+            email,
+            username,
+            password,
+            birthdate,
+            height,
+            weight,
+            eyes,
+            hair,
+            children,
+            job,
+            hobbies,
+            orientation,
+            search
+        };
+
+        // Odeslání dat na server
+        fetch('localhost3000', { // Změň 'db_url' na skutečnou URL pro registraci
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Registrace byla úspěšná!');
+                window.location.href = 'profil.html'; // Přesměrování na profil
+            } else {
+                alert('Chyba při registraci: ' + data.message);
+            }
+        })
+    
+</script>
+<script src="script.js"></script>
+</body>
+</html>
+

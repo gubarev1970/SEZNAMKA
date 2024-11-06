@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil uživatele</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .profile-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Profil uživatele</h1>
+    <div class="profile-container">
+        <p><strong>Email:</strong> <span id="email">neuvedeno</span></p>
+        <p><strong>Datum narození:</strong> <span id="birthdate">neuvedeno</span></p>
+        <p><strong>Výška:</strong> <span id="height">neuvedeno</span> cm</p>
+        <p><strong>Váha:</strong> <span id="weight">neuvedeno</span> kg</p>
+        <p><strong>Barva očí:</strong> <span id="eyes">neuvedeno</span></p>
+        <p><strong>Barva vlasů:</strong> <span id="hair">neuvedeno</span></p>
+        <p><strong>Počet dětí:</strong> <span id="children">neuvedeno</span></p>
+        <p><strong>Zaměstnání:</strong> <span id="job">neuvedeno</span></p>
+        <p><strong>Koníčky:</strong> <span id="hobbies">neuvedeno</span></p>
+        <p><strong>Sexuální orientace:</strong> <span id="orientation">neuvedeno</span></p>
+        <p><strong>Koho hledáte:</strong> <span id="search">neuvedeno</span></p>
+    </div>
+
+    <script>
+        
+    const email = 'uzivatel@example.com'; // Zde můžete získat email z přihlášení
+
+    fetch(`http://localhost:3000/profile/${email}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Síťová odpověď nebyla v pořádku');
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('email').textContent = data.email || 'neuvedeno';
+            document.getElementById('birthdate').textContent = data.birthdate || 'neuvedeno';
+            document.getElementById('height').textContent = data.height || 'neuvedeno';
+            document.getElementById('weight').textContent = data.weight || 'neuvedeno';
+            document.getElementById('eyes').textContent = data.eyes || 'neuvedeno';
+            document.getElementById('hair').textContent = data.hair || 'neuvedeno';
+            document.getElementById('children').textContent = data.children || 'neuvedeno';
+            document.getElementById('job').textContent = data.job || 'neuvedeno';
+            document.getElementById('hobbies').textContent = data.hobbies || 'neuvedeno';
+            document.getElementById('orientation').textContent = data.orientation || 'neuvedeno';
+            document.getElementById('search').textContent = data.search || 'neuvedeno';
+        })
+        .catch(error => {
+            console.error('Chyba při načítání profilu:', error);
+            window.location.href = 'přihlášení.html'; // Přesměrování na přihlašovací stránku, pokud není nalezen profil
+        });
+
+<script>
+    // Načtení uživatelského profilu
+    const email = 'john@example.com'; // Zde zadejte email uživatele
+    fetch(`/profile/${email}`)
+        .then(response => response.json())
+        .then(data => {
+            // Zobrazit data na stránce
+            document.getElementById('email').textContent = data.email || 'neuvedeno';
+            document.getElementById('birthdate').textContent = data.birthdate || 'neuvedeno';
+            // Pokračujte s ostatními daty...
+        })
+        .catch(err => console.error('Chyba při načítání profilu', err));
+</script>
+<script src="app.js"></script>
+</body>
+</html>
+

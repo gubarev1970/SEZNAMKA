@@ -33,8 +33,8 @@ const seedDatabase = async (count) => {
       await pool.query(
         'INSERT INTO users (username, email, password, date_of_birth, city, hobbies, children, job, sexual_orientation) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
         [
-          user.username,
           user.email,
+          user.username,
           user.password,
           user.dateOfBirth,
           user.city,

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .profile-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+        #profileImage {
+            display: none;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+        #uploadButton {
+            background-color: #4CAF50; /* Zelená */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #uploadButton:hover {
+            background-color: #45a049; /* Tmavší zelená při najetí myší */
+        }
+        #message {
+            color: green;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-container">
+        <h1>Profil</h1>
+        <input type="file" id="profileImageInput" accept="image/*">
+        <img id="profileImage" src="" alt="Profilový obrázek" />
+        <button id="uploadButton">Nahrát obrázek</button>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        const username = 'seznamkaDB'; // Získej uživatelské jméno z přihlášení nebo localStorage
+
+        document.getElementById('uploadButton').addEventListener('click', function() {
+            const fileInput = document.getElementById('profileImageInput');
+            const formData = new FormData();
+            formData.append('profileImage', fileInput.files[0]);
+            formData.append('username', username); // Přidej uživatelské jméno
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const message = document.getElementById('message');
+                if (data.success) {
+                    // Zobrazit nově nahraný obrázek
+                    const profileImage = document.getElementById('profileImage');
+                    profileImage.src = data.profileImage; // Nastavit src na cestu k obrázku
+                    profileImage.style.display = 'block'; // Zobrazit obrázek
+                    message.textContent = "Obrázek byl úspěšně nahrán!";
+                    message.style.color = "green"; // Úspěšná zpráva
+                } else {
+                    message.textContent = "Nahrání obrázku selhalo. Zkuste to znovu.";
+                    message.style.color = "red"; // Chyba
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const message = document.getElementById('message');
+                message.textContent = "Došlo k chybě při nahrávání obrázku.";
+                message.style.color = "red"; // Chyba
+            });
+        });
+
+        // Načíst uživatelská data při načtení stránky
+        window.onload = function() {
+            fetch(`/user/${username}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.profileImage) {
+                        const profileImage = document.getElementById('profileImage');
+                        profileImage.src = data.profileImage; // Nastavit src na cestu k obrázku
+                        profileImage.style.display = 'block'; // Zobrazit obrázek
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching user data:', error);
+                    const message = document.getElementById('message');
+                    message.textContent = "Nebylo možné načíst uživatelská data.";
+                    message.style.color = "red"; // Chyba
+                });
+        };
+    </script>
+<script src="app.js"></script>
+</body>
+</html>
+
