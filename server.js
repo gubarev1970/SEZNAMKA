@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const { Pool } = require('pg');
 const path = require('path');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 
 // Připojení k databázi PostgreSQL
 const db_url = 'tvoje_db_url_tady'; // Nahraď svým URL
