@@ -3,9 +3,10 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// Obslouží statické soubory ze složky public
+// Obsluhujeme statické soubory ze složky 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Odeslání souboru index.html jako hlavní stránka
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
