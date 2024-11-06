@@ -15,13 +15,6 @@ const pool = new Pool({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Statické soubory z veřejné složky
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Hlavní stránka (index.html)
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
 
 // Endpoint pro registraci
 app.post('/register', async (req, res) => {
