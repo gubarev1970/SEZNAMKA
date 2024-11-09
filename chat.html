@@ -1,178 +1,187 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat</title>
+    <title>Chat s emotikony</title>
     <style>
-        /* Stylování stránky */
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
+            background-color: #f4f4f9;
             padding: 20px;
-            background-color: #f4f4f4;
-        }
-        header {
-            background: #35424a;
-            color: #ffffff;
-            padding: 10px 0;
-            text-align: center;
         }
         .chat-container {
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 100%;
             max-width: 600px;
-            margin: 20px auto;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
-        .message-window {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            height: 300px;
+        h2 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        #messages {
+            height: 200px;
             overflow-y: auto;
-            margin-bottom: 10px;
-        }
-        .input-container {
-            display: flex;
-        }
-        .input-container input[type="text"] {
-            flex: 1;
-            padding: 10px;
+            background-color: #f9f9f9;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
         }
-        .input-container button {
+        .message {
+            background-color: #f1f1f1;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-top: 10px;
+            resize: none;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        #sendButton {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
             background-color: #4CAF50;
             color: white;
+            font-size: 16px;
             border: none;
-            padding: 10px 15px;
             border-radius: 5px;
             cursor: pointer;
-            margin-left: 10px;
+            transition: background-color 0.3s;
         }
-        .input-container button:hover {
-            background-color: #45a049;
+        #sendButton:hover {
+            background-color: #45A049;
         }
-        .emoji-picker {
-            display: flex;
-            flex-wrap: wrap;
+        #coinsInfo {
             margin-top: 10px;
+            text-align: center;
+            font-size: 18px;
         }
-        .emoji {
-            font-size: 20px;
+        .emoji-container {
+            margin-top: 10px;
+            text-align: center;
+        }
+        #emojiSelect {
+            padding: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+        .emoji-list {
+            display: none;
+            margin-top: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            position: absolute;
+            padding: 10px;
+            max-width: 300px;
+            text-align: center;
+        }
+        .emoji-list span {
+            font-size: 24px;
             cursor: pointer;
             margin: 5px;
+        }
+        .emoji-list span:hover {
+            background-color: #f1f1f1;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-
-<header>
-    <h2>Chat</h2>
-    <div id="coinDisplay">Mince: 0</div>
-</header>
-
-<div class="chat-container">
-    <div class="message-window" id="messageWindow"></div>
-
-    <div class="input-container">
-        <input type="text" id="messageInput" placeholder="Napište zprávu..." />
-        <button id="sendButton">Odeslat</button>
+    <div class="chat-container">
+        <h2>Chat s emotikony</h2>
+        <div id="messages"></div>
+        <textarea id="messageInput" placeholder="Napište zprávu..." rows="4"></textarea>
+        <button id="sendButton" onclick="sendMessage()">Odeslat zprávu</button>
+        <p>Aktuální počet mincí: <span id="coins-display">0</span></p>
     </div>
 
-    <div class="emoji-picker">
-        <span class="emoji" onclick="addEmoji('😊')">😊</span>
-        <span class="emoji" onclick="addEmoji('😢')">😢</span>
-        <span class="emoji" onclick="addEmoji('😂')">😂</span>
-        <span class="emoji" onclick="addEmoji('😍')">😍</span>
-        <span class="emoji" onclick="addEmoji('😎')">😎</span>
-        <span class="emoji" onclick="addEmoji('😡')">😡</span>
-        <span class="emoji" onclick="addEmoji('😱')">😱</span>
-        <span class="emoji" onclick="addEmoji('👍')">👍</span>
-        <span class="emoji" onclick="addEmoji('👋')">👋</span>
-        <span class="emoji" onclick="addEmoji('💔')">💔</span>
-        <span class="emoji" onclick="addEmoji('🎉')">🎉</span>
-        <span class="emoji" onclick="addEmoji('🌟')">🌟</span>
+    <div class="emoji-container">
+        <button id="emojiSelect">😊 Smajlíci</button>
+        <div class="emoji-list" id="emojiList">
+            <span onclick="addEmoji('😊')">😊</span>
+            <span onclick="addEmoji('❤️')">❤️</span>
+            <span onclick="addEmoji('😍')">😍</span>
+            <span onclick="addEmoji('😘')">😘</span>
+            <span onclick="addEmoji('😎')">😎</span>
+            <span onclick="addEmoji('😂')">😂</span>
+            <span onclick="addEmoji('😢')">😢</span>
+            <span onclick="addEmoji('👍')">👍</span>
+            <span onclick="addEmoji('👏')">👏</span>
+            <span onclick="addEmoji('💪')">💪</span>
+            <span onclick="addEmoji('🌟')">🌟</span>
+            <span onclick="addEmoji('💖')">💖</span>
+            <span onclick="addEmoji('🔥')">🔥</span>
+            <span onclick="addEmoji('🌹')">🌹</span>
+            <span onclick="addEmoji('✨')">✨</span>
+            <span onclick="addEmoji('🎉')">🎉</span>
+            <span onclick="addEmoji('💃')">💃</span>
+        </div>
     </div>
-</div>
 
-<script>
-let userCoins = 0;
+    <script>
+        const minCoinRequirement = 50; // Cena za jednu zprávu
 
-// Načtení mincí při načtení stránky chatu
-async function loadCoins() {
-    try {
-        const response = await fetch('db_url/user-coins', {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include'
+        // Inicializace počtu mincí z localStorage
+        let userCoins = parseInt(localStorage.getItem('coins'),0) || 500;
+
+        // Funkce pro odeslání zprávy
+        function sendMessage() {
+            // Zkontrolujeme, jestli má uživatel dostatek mincí na odeslání zprávy
+            if (userCoins < minCoinRequirement) {
+                alert('Nemáte dostatek mincí. Pro odeslání zprávy si prosím zakupte více mincí.');
+                return; // Pokud není dostatek mincí, zpráva se neodešle
+            }
+
+            // Snížíme počet mincí o 50 (cena za jednu zprávu)
+            userCoins -= minCoinRequirement;
+
+            // Uložíme zpět nový počet mincí do localStorage
+            localStorage.setItem('coins', userCoins);
+
+            
+        // Inicializace zobrazení počtu mincí
+        document.getElementById('coins-display').textContent = userCoins;
+
+            // Vytvoření nové zprávy v chatu
+            const messageDisplay = document.getElementById('messages');
+            const newMessage = document.createElement('div');
+            newMessage.className = 'message';
+            newMessage.textContent = document.getElementById('messageInput').value;
+            messageDisplay.appendChild(newMessage);
+
+            // Vymazání textového pole po odeslání
+            document.getElementById('messageInput').value = '';
+        }
+
+        // Funkce pro přidání smajlíka do textového pole
+        function addEmoji(emoji) {
+            const messageInput = document.getElementById('messageInput');
+            messageInput.value += emoji;
+            messageInput.focus();
+        }
+
+        // Funkce pro zobrazení/skrytí seznamu smajlíků
+        document.getElementById('emojiSelect').addEventListener('click', function () {
+            const emojiList = document.getElementById('emojiList');
+            emojiList.style.display = emojiList.style.display === 'block' ? 'none' : 'block';
         });
 
-        if (response.ok) {
-            const data = await response.json();
-            userCoins = data.coins || 0;
-            updateCoinDisplay();
+    </script>
 
-            // Kontrola a upozornění, pokud je počet mincí nula
-            if (userCoins === 0) {
-                alert("Nemáte mince. Pro další zprávy si musíte koupit další mince.");
-            }
-        } else {
-            console.error("Nepodařilo se načíst počet mincí z API.");
-            alert("Nepodařilo se načíst počet mincí.");
-        }
-    } catch (error) {
-        console.error("Chyba při načítání mincí:", error);
-        alert("Došlo k chybě při načítání mincí.");
-    }
-}
-
-// Aktualizace zobrazení mincí
-function updateCoinDisplay() {
-    const coinDisplay = document.getElementById('coinDisplay');
-    if (coinDisplay) {
-        coinDisplay.textContent = `Mince: ${userCoins}`;
-    }
-}
-
-// Zavolat funkci pro načtení mincí při načtení stránky
-loadCoins();
-
-function addEmoji(emoji) {
-    const input = document.getElementById('messageInput');
-    if (input) {
-        input.value += emoji;  // Přidá smajlík do vstupního pole
-        input.focus();  // Nastaví kurzor zpět do vstupního pole
-    } else {
-        console.error("Chyba: Pole pro zadání zprávy nebylo nalezeno.");
-    }
-}
-
-// Odeslání zprávy
-document.getElementById('sendButton').addEventListener('click', function() {
-    const messageInput = document.getElementById('messageInput');
-    const message = messageInput.value;
-
-    // Zkontrolujte, zda je uživatel dostatečně mincí
-    if (userCoins > 0 && message.trim() !== "") {
-        // Odeslat zprávu a snížit počet mincí
-        userCoins -= 1; // Cena zprávy je 1 mince
-        updateCoinDisplay();
-        
-        // Přidat zprávu do okna zpráv
-        const messageWindow = document.getElementById('messageWindow');
-        const messageElement = document.createElement('div');
-        messageElement.textContent = message;
-        messageWindow.appendChild(messageElement);
-        messageInput.value = ''; // Vymazat vstupní pole
-    } else {
-        alert("Nemáte dostatek mincí k odeslání zprávy.");
-    }
-});
-</script>
-<script src="app.js"></script>
 </body>
 </html>
 

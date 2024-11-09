@@ -80,7 +80,7 @@
 
     <main class="main-content">
         <section class="login-section">
-            <form id="loginForm" action="/login" method="POST" onsubmit="return handleLogin(event)">
+            <form id="loginForm">
                 <label for="username">Jméno:</label>
                 <input type="text" id="username" name="username" required>
 
@@ -89,33 +89,43 @@
 
                 <button type="submit">Přihlásit se</button>
             </form>
+            <p id="loginMessage"></p>
         </section>
     </main>
 
-<script>
-        function handleLogin(event) {
-            event.preventDefault(); // Zabráníme standardnímu chování formuláře
+    <script>
+        // Předdefinované přihlašovací údaje (pro účely testování)
+        const validUsername = 'BATMAN70';
+        const validPassword = '112233';
 
-            const form = event.target;
-            const formData = new FormData(form);
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Zabráníme standardnímu odeslání formuláře
 
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => {
-                if (response.ok) {
-                    window.location.href = 'chat.html';
-                } else {
-                    alert('Chybné přihlašovací údaje, zkuste to prosím znovu.');
-                }
-            })
-            .catch(error => {
-                console.error('Chyba:', error);
-            });
-        }
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Kontrola přihlašovacích údajů
+            if (username === validUsername && password === validPassword) {
+                // Uložení přihlášení do localStorage
+                localStorage.setItem('loggedIn', true);
+                localStorage.setItem('username', username);
+
+                // Zobrazení úspěšné zprávy
+                document.getElementById('loginMessage').textContent = 'Byli jste úspěšně přihlášeni!';
+                document.getElementById('loginMessage').style.color = 'green';
+
+                // Přesměrování na jinou stránku (např. na chat)
+                setTimeout(function() {
+                    window.location.href = 'chat.html'; // Nahraďte vlastní cílovou stránkou
+                }, 2000); // Po 2 sekundách přesměrování na chat
+            } else {
+                // Zobrazení chybové zprávy
+                document.getElementById('loginMessage').textContent = 'Chybné přihlašovací údaje, zkuste to prosím znovu.';
+                document.getElementById('loginMessage').style.color = 'red';
+            }
+        });
     </script>
-<script src="app.js"></script>
+
 </body>
 </html>
 

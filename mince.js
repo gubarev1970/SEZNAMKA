@@ -12,13 +12,7 @@ const client = new Client({
 async function addCoins(username, amount) {
     await client.connect();
     try {
-        // Zkontroluj, zda uživatel existuje
-        const resUser = await client.query('SELECT * FROM user_coins WHERE username = $1', [username]);
-        
-        if (resUser.rows.length === 0) {
-            console.error('Uživatel neexistuje.');
-            return;
-        }
+   
 
         // Přidej mince
         await client.query('UPDATE user_coins SET coins = coins + $1 WHERE username = $2', [amount, username]);

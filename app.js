@@ -1,62 +1,31 @@
-document.getElementById('registerButton').addEventListener('click', async () => {
-    const response = await fetch('/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            email: document.getElementById('email').value,
-            username: document.getElementById('username').value,
-            password: document.getElementById('password').value,
-            birthdate: document.getElementById('birthdate').value,
-            height: document.getElementById('height').value,
-            weight: document.getElementById('weight').value,
-            hobbies: document.getElementById('hobbies').value,
-            children: document.getElementById('children').value,
-            employment: document.getElementById('employment').value,
-            sexualOrientation: document.getElementById('sexualOrientation').value,
-            lookingFor: document.getElementById('lookingFor').value,
-        })
-    });
+// Uložení údajů z registračního formuláře do localStorage
+document.addEventListener('DOMContentLoaded', function() {
+    const registrationForm = document.getElementById('registrationForm');
+    if (registrationForm) {
+        registrationForm.addEventListener('submit', function(event) {
+            event.preventDefault(); 
 
-    const data = await response.json();
-    alert(data.message || data.error);
-});
+            const userProfile = {
+                username: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                birthdate: document.getElementById('birthdate').value,
+                height: document.getElementById('height').value,
+                weight: document.getElementById('weight').value,
+                eyes: document.getElementById('eyes').value,
+                hair: document.getElementById('hair').value,
+                children: document.getElementById('children').value,
+                job: document.getElementById('job').value,
+                hobbies: document.getElementById('hobbies').value,
+                orientation: document.getElementById('orientation').value,
+                search: document.getElementById('search').value
+            };
 
-document.getElementById('loginButton').addEventListener('click', async () => {
-    const response = await fetch('/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            username: document.getElementById('username').value,
-            password: document.getElementById('password').value,
-        })
-    });
+            // Uložení dat do localStorage
+            localStorage.setItem('userProfile', JSON.stringify(userProfile));
 
-    const data = await response.json();
-    if (data.coins !== undefined) {
-        alert(`Přihlášení úspěšné! Máte ${data.coins} mincí.`);
-        // Zobrazit mince v chatu
-    } else {
-        alert(data.error);
-    }
-});
-
-document.getElementById('sendButton').addEventListener('click', async () => {
-    const response = await fetch('/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            senderId: currentUserId, // Získejte aktuálního uživatele
-            recipientId: recipientId, // Získejte ID příjemce
-            messageContent: document.getElementById('messageInput').value,
-        })
-    });
-
-    const data = await response.json();
-    if (data.error) {
-        alert(data.error);
-    } else {
-        // Přidejte zprávu do chatu
-        displayMessage(data);
+            alert('Registrace byla úspěšná!');
+            window.location.href = 'profil.html'; // Přesměrování na profilovou stránku
+        });
     }
 });
 

@@ -103,59 +103,66 @@
     <button type="submit" id="registerButton">Registrovat</button>
 </form>
 
+<p>Počet mincí: <span id="coins">0</span></p>
+
+<ul>
+    <li><a href="přihlášení.html">Přihlášení</a></li>
+    <li><a href="profil.html">Profil</a></li>
+    <li><a href="chat.html">Chat</a></li>
+    <li><a href="koupit mince.html">Koupit mince</a></li>
+    <li><a href="komentáře.html">Komentáře</a></li>
+    <li><a href="fotky.html">Nahrát profilový obrázek</a></li>
+</ul>
+
 <script>
-    document.getElementById('registrationForm').addEventListener('submit', function(event) {
-        event.preventDefault();
+document.getElementById('registrationForm').addEventListener('submit', function(event) {
+    event.preventDefault();
 
-        const email = document.getElementById('email').value;
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const birthdate = document.getElementById('birthdate').value;
-        const height = document.getElementById('height').value;
-        const weight = document.getElementById('weight').value;
-        const eyes = document.getElementById('eyes').value;
-        const hair = document.getElementById('hair').value;
-        const children = document.getElementById('children').value;
-        const job = document.getElementById('job').value;
-        const hobbies = document.getElementById('hobbies').value;
-        const orientation = document.getElementById('orientation').value;
-        const search = document.getElementById('search').value;
+    const email = document.getElementById('email').value;
+    const username = document.getElementById('username').value;
+    const birthdate = document.getElementById('birthdate').value;
+    const height = document.getElementById('height').value;
+    const weight = document.getElementById('weight').value;
+    const eyes = document.getElementById('eyes').value;
+    const hair = document.getElementById('hair').value;
+    const children = document.getElementById('children').value;
+    const job = document.getElementById('job').value;
+    const hobbies = document.getElementById('hobbies').value;
+    const orientation = document.getElementById('orientation').value;
+    const search = document.getElementById('search').value;
 
-        // Vytvoření objektu s daty uživatele
-        const userData = {
-            email,
-            username,
-            password,
-            birthdate,
-            height,
-            weight,
-            eyes,
-            hair,
-            children,
-            job,
-            hobbies,
-            orientation,
-            search
-        };
+    // Uložení dat do localStorage
+    localStorage.setItem('userProfile', JSON.stringify({
+        email,
+        username,
+        birthdate,
+        height,
+        weight,
+        eyes,
+        hair,
+        children,
+        job,
+        hobbies,
+        orientation,
+        search,
+        coins: 500 // Bonus 500 mincí za registraci
+    }));
 
-        // Odeslání dat na server
-        fetch('localhost3000', { // Změň 'db_url' na skutečnou URL pro registraci
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Registrace byla úspěšná!');
-                window.location.href = 'profil.html'; // Přesměrování na profil
-            } else {
-                alert('Chyba při registraci: ' + data.message);
-            }
-        })
-    
+    // Uložení bonusu 500 mincí do localStorage
+    localStorage.setItem('userCoins', 500);
+    alert("Bonus 500 mincí byl přidán na váš účet!");
+
+    // Přesměrování po registraci
+    window.location.href = 'profil.html';
+});
+
+// Zobrazení mincí na stránce profilu nebo chatu
+window.addEventListener('load', function() {
+    const coins = localStorage.getItem('userCoins');
+    if (coins) {
+        document.getElementById('coins').innerText = coins;
+    }
+});
 </script>
 <script src="script.js"></script>
 </body>

@@ -32,7 +32,7 @@
 </head>
 <body>
 
-    <h1>Profil uživatele</h1>
+   <h1>Profil uživatele</h1>
     <div class="profile-container">
         <p><strong>Email:</strong> <span id="email">neuvedeno</span></p>
         <p><strong>Datum narození:</strong> <span id="birthdate">neuvedeno</span></p>
@@ -45,51 +45,111 @@
         <p><strong>Koníčky:</strong> <span id="hobbies">neuvedeno</span></p>
         <p><strong>Sexuální orientace:</strong> <span id="orientation">neuvedeno</span></p>
         <p><strong>Koho hledáte:</strong> <span id="search">neuvedeno</span></p>
+        <p><strong>Počet mincí:</strong> <span id="coins-display">neuvedeno</span></p>
     </div>
 
-    <script>
+    <div class="profile-container">
+        <div class="profile-info">
+            <label for="profileImage">Vyberte fotku pro profil</label>
+            <input type="file" id="profileImage" accept="image/*">
+            <button class="upload-button" id="uploadButton">Nahrát fotku</button>
+        </div>
         
-    const email = 'uzivatel@example.com'; // Zde můžete získat email z přihlášení
+        <div id="profileImagePreview" class="profile-info">
+            <p>Fotka: <span id="imageName">Není nahrána</span></p>
+            <img id="imagePreview" src="" alt="Náhled fotky" style="max-width: 200px; display: none;">
+        </div>
+    </div>
 
-    fetch(`http://localhost:3000/profile/${email}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Síťová odpověď nebyla v pořádku');
+    <ul>
+        <li><a href="registrace.html">Registrace</a></li>
+        <li><a href="přihlášení.html">Přihlášení</a></li>
+        <li><a href="chat.html">Chat</a></li>
+        <li><a href="koupit mince.html">Koupit mince</a></li>
+        <li><a href="komentáře.html">Komentáře</a></li>
+        <li><a href="fotky.html">Nahrát profilový obrázek</a></li>
+    </ul>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Načtení profilu a mincí z localStorage
+            const userData = JSON.parse(localStorage.getItem('userProfile'));
+            const userCoins = localStorage.getItem('coins');
+
+            // Pokud data existují, zobrazí se na stránce
+            if (userData) {
+                document.getElementById('email').textContent = userData.email || 'neuvedeno';
+                document.getElementById('birthdate').textContent = userData.birthdate || 'neuvedeno';
+                document.getElementById('height').textContent = userData.height || 'neuvedeno';
+                document.getElementById('weight').textContent = userData.weight || 'neuvedeno';
+                document.getElementById('eyes').textContent = userData.eyes || 'neuvedeno';
+                document.getElementById('hair').textContent = userData.hair || 'neuvedeno';
+                document.getElementById('children').textContent = userData.children || 'neuvedeno';
+                document.getElementById('job').textContent = userData.job || 'neuvedeno';
+                document.getElementById('hobbies').textContent = userData.hobbies || 'neuvedeno';
+                document.getElementById('orientation').textContent = userData.orientation || 'neuvedeno';
+                document.getElementById('search').textContent = userData.search || 'neuvedeno';
+                
+                // Zobrazení počtu mincí
+                document.getElementById('coins-display').textContent = userCoins || 'neuvedeno';
+            } else {
+                alert('Profil nenalezen. Prosím, zaregistrujte se.');
             }
-            return response.json();
-        })
-        .then(data => {
-            document.getElementById('email').textContent = data.email || 'neuvedeno';
-            document.getElementById('birthdate').textContent = data.birthdate || 'neuvedeno';
-            document.getElementById('height').textContent = data.height || 'neuvedeno';
-            document.getElementById('weight').textContent = data.weight || 'neuvedeno';
-            document.getElementById('eyes').textContent = data.eyes || 'neuvedeno';
-            document.getElementById('hair').textContent = data.hair || 'neuvedeno';
-            document.getElementById('children').textContent = data.children || 'neuvedeno';
-            document.getElementById('job').textContent = data.job || 'neuvedeno';
-            document.getElementById('hobbies').textContent = data.hobbies || 'neuvedeno';
-            document.getElementById('orientation').textContent = data.orientation || 'neuvedeno';
-            document.getElementById('search').textContent = data.search || 'neuvedeno';
-        })
-        .catch(error => {
-            console.error('Chyba při načítání profilu:', error);
-            window.location.href = 'přihlášení.html'; // Přesměrování na přihlašovací stránku, pokud není nalezen profil
-        });
 
-<script>
-    // Načtení uživatelského profilu
-    const email = 'john@example.com'; // Zde zadejte email uživatele
-    fetch(`/profile/${email}`)
-        .then(response => response.json())
-        .then(data => {
-            // Zobrazit data na stránce
-            document.getElementById('email').textContent = data.email || 'neuvedeno';
-            document.getElementById('birthdate').textContent = data.birthdate || 'neuvedeno';
-            // Pokračujte s ostatními daty...
-        })
-        .catch(err => console.error('Chyba při načítání profilu', err));
-</script>
-<script src="app.js"></script>
+            // Funkce pro zobrazení náhledu obrázku před nahráním
+            document.getElementById('profileImage').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                const preview = document.getElementById('imagePreview');
+                const imageName = document.getElementById('imageName');
+                
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.style.display = 'block';
+                        preview.src = e.target.result;
+                        imageName.textContent = file.name;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.style.display = 'none';
+                    imageName.textContent = 'Není nahrána';
+                }
+            });
+
+            // Funkce pro nahrání obrázku na server
+            document.getElementById('uploadButton').addEventListener('click', function() {
+                const fileInput = document.getElementById('profileImage');
+                const file = fileInput.files[0];
+
+                if (file) {
+                    const formData = new FormData();
+                    formData.append('image', file);
+
+                    // Příklad odeslání na server (vyžaduje serverovou část pro zpracování)
+                    fetch('/upload', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Fotka byla úspěšně nahrána!');
+                            // Po úspěšném nahrání fotky aktualizujeme náhled
+                            document.getElementById('profileImageFromDb').src = data.filePath;
+                        } else {
+                            alert('Došlo k chybě při nahrávání fotky.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Chyba při nahrávání:', error);
+                        alert('Chyba při nahrávání fotky.');
+                    });
+                } else {
+                    alert('Prosím vyberte fotku před nahráním.');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
 

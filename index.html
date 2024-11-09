@@ -61,7 +61,7 @@
         <li><a href="přihlášení.html">Přihlášení</a></li>
         <li><a href="profil.html">Profil</a></li>
         <li><a href="chat.html">Chat</a></li>
-        <li><a href="platby.html">Platby</a></li>
+        <li><a href="koupit mince.html">Koupit mince</a></li>
         <li><a href="komentáře.html">Komentáře</a></li>
         <li><a href="fotky.html">Nahrát profilový obrázek</a></li>
     </ul>
@@ -96,7 +96,7 @@
         }
 
         // Nastavení počtu mincí
-        let userCoins = 200; 
+        let userCoins = 500; 
 
         // Aktualizace stavu tlačítka pro odesílání zpráv
         function updateSendButtonState() {
@@ -107,15 +107,12 @@
         }
 
         updateSendButtonState();
-
-        // Odeslání zprávy
-        const sendButton = document.getElementById('sendButton');
         if (sendButton) {
             sendButton.addEventListener('click', function() {
                 const messageInput = document.getElementById('messageInput');
                 const messageDisplay = document.getElementById('messageDisplay');
 
-                if (userCoins > 0 && messageInput.value.trim() !== "") {
+                if (userCoins > 500 && messageInput.value.trim() !== "") {
                     userCoins--;
                     const newMessage = document.createElement('p');
                     newMessage.textContent = messageInput.value;
