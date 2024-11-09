@@ -1,41 +1,48 @@
 const express = require('express');
 const path = require('path');
 const app = express();
+const port = 3000;
 
-// Nastavení složky pro statické soubory na složku src/public
-app.use(express.static(path.join(__dirname, 'public')));
+// Cesta pro statické soubory
+app.use(express.static(path.join(__dirname, 'src', 'public')));
 
-// Nastavení hlavní stránky na `index.html` ve složce src/public
+// Hlavní stránka - index.html
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'src', 'index.html'));
 });
 
-// Rucní nastavení cest k jednotlivým stránkám v složce src/public
-app.get('/registrace.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'registrace.html'));
-});
-app.get('/prihlášení.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'prihlášení.html'));
-});
-app.get('/profil.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'profil.html'));
-});
-app.get('/chat.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'chat.html'));
-});
-app.get('/koupit mince.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'koupit mince.html'));
-});
-app.get('/komentáre.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'komentáre.html'));
-});
-app.get('/fotky.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'fotky.html'));
+// Registrace
+app.get('/registrace', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src', 'registrace.html'));
 });
 
-// Nastavení portu
-const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => {
-    console.log(`Server beží na http://localhost:${PORT}`);
+// Prihlášení
+app.get('/prihlaseni', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src', 'prihlášení.html'));
+});
+
+// Profil
+app.get('/profil', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src', 'profil.html'));
+});
+
+// Chat
+app.get('/chat', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src', 'chat.html'));
+});
+
+// Koupit mince
+app.get('/koupit-mince', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src', 'koupit mince.html'));
+});
+
+// Komentáre
+app.get('/komentare', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src', 'komentáre.html'));
+});
+
+// Spuštení serveru
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
 });
 
