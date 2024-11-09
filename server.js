@@ -2,9 +2,6 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-// Nastavení složky pro statické soubory v korenovém adresári
-app.use(express.static(__dirname));
-
 // Nastavení hlavní stránky na `index.html` v korenovém adresári
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
