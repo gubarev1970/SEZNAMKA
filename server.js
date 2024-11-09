@@ -2,15 +2,15 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-// Nastavení složky pro statické soubory na složku public
+// Nastavení složky pro statické soubory na složku src/public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Nastavení hlavní stránky na `index.html` ve složce public
+// Nastavení hlavní stránky na `index.html` ve složce src/public
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Rucní nastavení cest k jednotlivým stránkám v složce public
+// Rucní nastavení cest k jednotlivým stránkám v složce src/public
 app.get('/registrace.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'registrace.html'));
 });
